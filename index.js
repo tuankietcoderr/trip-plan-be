@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const morgan = require("morgan");
 
 //! config using app
 dotenv.config();
@@ -29,6 +30,7 @@ app.use(
     preflightContinue: false,
   })
 );
+app.use(morgan("combined"));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(
   bodyParser.urlencoded({

@@ -39,6 +39,7 @@ const favoriteRouter = require("./routes/favorite");
 const dayRouter = require("./routes/day");
 const attractionRouter = require("./routes/attraction");
 const budgetExpenseRouter = require("./routes/budget-expense");
+const memoryRouter = require("./routes/memory");
 
 //! Database connection
 const connectDB = async () => {
@@ -65,6 +66,8 @@ app.use("/api/favorite", favoriteRouter);
 app.use("/api/day", dayRouter);
 app.use("/api/attraction", attractionRouter);
 app.use("/api/budget-expense", budgetExpenseRouter);
+app.use("/api/memory", memoryRouter);
+
 //! app listening
 const PORT = process.env.PORT || 5000;
 

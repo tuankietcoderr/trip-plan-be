@@ -23,9 +23,9 @@ router.get("/:id", verifyToken, async (req, res) => {
 });
 
 router.post("/", verifyToken, async (req, res) => {
-  const { name, description, image, address, types } = req.body;
+  const { name, description, image, address, type } = req.body;
 
-  if (!name || !description || !image || !address || !types)
+  if (!name || !description || !image || !address || !type)
     return res
       .status(400)
       .json({ success: false, message: "Please enter all fields" });
@@ -35,7 +35,7 @@ router.post("/", verifyToken, async (req, res) => {
       description,
       image,
       address,
-      types,
+      type,
     });
     await newPlace.save();
     res.json({ success: true, message: "Place created", place: newPlace });

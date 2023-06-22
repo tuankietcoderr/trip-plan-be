@@ -3,8 +3,10 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 //! config using app
+dotenv.config();
 app.use(
   cors({
     origin: "*",
@@ -28,9 +30,14 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  })
+);
+app.use(bodyParser.json());
 app.use(express.json({ limit: "50mb" }));
-dotenv.config();
-
+app.use("/uploads", express.static("uploads"));
 //! router
 const authRouter = require("./routes/auth");
 const placeRouter = require("./routes/place");
@@ -40,6 +47,7 @@ const dayRouter = require("./routes/day");
 const attractionRouter = require("./routes/attraction");
 const budgetExpenseRouter = require("./routes/budget-expense");
 const memoryRouter = require("./routes/memory");
+const imageServerRouter = require("./routes/image-server");
 
 //! Database connection
 const connectDB = async () => {
@@ -67,6 +75,7 @@ app.use("/api/day", dayRouter);
 app.use("/api/attraction", attractionRouter);
 app.use("/api/budget-expense", budgetExpenseRouter);
 app.use("/api/memory", memoryRouter);
+app.use("/api/image-server", imageServerRouter);
 
 //! app listening
 const PORT = process.env.PORT || 5000;

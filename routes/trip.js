@@ -11,7 +11,7 @@ const toId = require("mongodb").ObjectId;
 
 router.get("/user", verifyToken, async (req, res) => {
   try {
-    const trips = await Trip.findOne({
+    const trips = await Trip.find({
       user_id: new toId(req.user_id),
     });
     res.status(200).json({ success: true, trips });
@@ -23,7 +23,9 @@ router.get("/user", verifyToken, async (req, res) => {
 
 router.get("/user/:id", verifyToken, async (req, res) => {
   try {
-    const trip = await Trip.findById(req.params.id).populate("place_id");
+    const trip = await Trip.findById(new toId(req.params.id)).populate(
+      "place_id"
+    );
     if (!trip) {
       return res
         .status(400)
@@ -64,6 +66,7 @@ router.post("/", verifyToken, async (req, res) => {
     await newTrip.save();
     res.json({ success: true, message: "Trip created", trip: newTrip });
   } catch (err) {
+    console.log({ err });
     res.status(500).json({ success: false, message: "Server error" });
   }
 });

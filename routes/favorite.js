@@ -28,18 +28,27 @@ router.post("/", verifyToken, async (req, res) => {
       .json({ success: false, message: "Please enter all fields" });
 
   try {
+    const placeId = new toId(place_id);
+    const favorite = await Favorite.findOne({
+      user_id: new toId(req.user_id),
+      place_id: placeId,
+    });
+    if (favorite) {
+      return res.status(400).json({
+        success: false,
+        message: "You have add this favorite already",
+      });
+    }
     const newFavorite = new Favorite({
       user_id: new toId(req.user_id),
       place_id: new toId(place_id),
     });
     await newFavorite.save();
-    res
-      .status(200)
-      .json({
-        success: true,
-        addedId: newFavorite._id,
-        message: "Add favorite success",
-      });
+    res.status(200).json({
+      success: true,
+      addedId: newFavorite._id,
+      message: "Add favorite success",
+    });
   } catch (error) {
     console.log({ error });
     res.status(500).json({ success: false, message: "Internal server error" });

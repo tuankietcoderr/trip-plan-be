@@ -6,20 +6,45 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/User");
 const verifyToken = require("../middleware/auth");
 const Credential = require("../model/Credential");
+const { Types } = require("mongoose");
+const toId = Types.ObjectId;
 
 router.get("/", verifyToken, async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.username }).select(
-      "-password"
-    );
+    const user = await User.findById(new toId(req.user_id)).select("-password");
     if (!user)
       return res
         .status(400)
         .json({ success: false, message: "User not found" });
     res.json({ success: true, user });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
+router.put("/", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(new toId(req.user_id));
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User does not exist" });
+    }
+    const update = {
+      ...user._doc,
+      ...req.body,
+    };
+    const updatedUser = await User.findByIdAndUpdate(user._id, update, {
+      new: true,
+    });
+    if (!updatedUser) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User does not exist" });
+    }
+    res.json({ success: true, message: "User updated", user: updatedUser });
+  } catch {
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
@@ -45,13 +70,13 @@ router.post("/signup", async (req, res) => {
     await newUser.save();
 
     const newCredential = new Credential({
-      username,
+      user_id: newUser._id,
       password,
     });
     await newCredential.save();
 
     const accessToken = jwt.sign(
-      { username: username },
+      { user_id: newUser._id.toString() },
       process.env.JWT_SECRET
     );
     res.json({ success: true, message: "User created", accessToken });
@@ -73,7 +98,9 @@ router.post("/signin", async (req, res) => {
         .status(400)
         .json({ success: false, message: "User does not exist" });
 
-    const credential = await Credential.findOne({ username });
+    const credential = await Credential.findOne({
+      user_id: user._id,
+    });
 
     if (!credential) {
       return res
@@ -87,7 +114,10 @@ router.post("/signin", async (req, res) => {
         .json({ success: false, message: "Wrong password" });
     }
 
-    const accessToken = jwt.sign({ username }, process.env.JWT_SECRET);
+    const accessToken = jwt.sign(
+      { user_id: user._id.toString() },
+      process.env.JWT_SECRET
+    );
     res.json({ success: true, message: "User logged in", accessToken, user });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });

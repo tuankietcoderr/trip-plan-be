@@ -51,7 +51,6 @@ router.put("/:id", verifyToken, async (req, res) => {
       ...place._doc,
       ...req.body,
     };
-    console.log({ placeUpdate });
     const placeUpdateCondition = { _id: req.params.id };
     const updatedPlace = await Place.findOneAndUpdate(
       placeUpdateCondition,
@@ -76,7 +75,11 @@ router.delete("/:id", verifyToken, async (req, res) => {
       return res
         .status(401)
         .json({ success: false, message: "Place not found" });
-    res.json({ success: true, message: "Place deleted", place: deletedPlace });
+    res.json({
+      success: true,
+      message: "Place deleted",
+      deletedId: deletedPlace._id,
+    });
   } catch {
     res.status(500).json({ success: false, message: "Server error" });
   }

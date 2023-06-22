@@ -34,6 +34,11 @@ dotenv.config();
 //! router
 const authRouter = require("./routes/auth");
 const placeRouter = require("./routes/place");
+const tripRouter = require("./routes/trip");
+const favoriteRouter = require("./routes/favorite");
+const dayRouter = require("./routes/day");
+const attractionRouter = require("./routes/attraction");
+const budgetExpenseRouter = require("./routes/budget-expense");
 
 //! Database connection
 const connectDB = async () => {
@@ -55,7 +60,11 @@ connectDB();
 //! use Router
 app.use("/api/user", authRouter);
 app.use("/api/place", placeRouter);
-
+app.use("/api/trip", tripRouter);
+app.use("/api/favorite", favoriteRouter);
+app.use("/api/day", dayRouter);
+app.use("/api/attraction", attractionRouter);
+app.use("/api/budget-expense", budgetExpenseRouter);
 //! app listening
 const PORT = process.env.PORT || 5000;
 

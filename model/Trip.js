@@ -13,7 +13,7 @@ const TripSchema = new mongoose.Schema({
   budget: {
     type: Number,
   },
-  image: {
+  name: {
     type: String,
   },
   user_id: {
@@ -23,6 +23,9 @@ const TripSchema = new mongoose.Schema({
   place_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "places",
+  },
+  image: {
+    type: String,
   },
 });
 

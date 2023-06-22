@@ -2,14 +2,10 @@ const mongoose = require("mongoose");
 
 const FavoriteSchema = new mongoose.Schema({
   user_id: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
   },
   place_id: {
-    type: String,
-  },
-  place: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "places",
   },
 });
 

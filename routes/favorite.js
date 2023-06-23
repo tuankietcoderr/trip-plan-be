@@ -43,7 +43,6 @@ router.post("/", verifyToken, async (req, res) => {
       user_id: new toId(req.user_id),
       place_id: placeId,
     });
-    console.log({ savedFavorite });
     await newFavorite.save();
     res.status(200).json({
       success: true,

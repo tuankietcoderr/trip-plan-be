@@ -61,7 +61,7 @@ router.post("/", verifyToken, async (req, res) => {
       end_at: new Date(end_at),
       user_id: new toId(req.user_id),
       place_id: placeId,
-      budget: 500000,
+      budget,
       image: place.image,
     });
     await newTrip.save();

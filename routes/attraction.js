@@ -32,7 +32,7 @@ router.post("/", verifyToken, async (req, res) => {
       day_id: new toId(day_id),
       location_name,
       address,
-      time: new Date(time),
+      time,
     });
     await newAttraction.save();
     await Day.findByIdAndUpdate(

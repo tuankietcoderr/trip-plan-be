@@ -8,7 +8,7 @@ const AttractionSchema = new mongoose.Schema({
     type: String,
   },
   time: {
-    type: Date,
+    type: String,
   },
   day_id: {
     type: mongoose.Schema.Types.ObjectId,

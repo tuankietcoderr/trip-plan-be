@@ -28,6 +28,7 @@ app.use(
     ],
     maxAge: 86400,
     preflightContinue: false,
+    optionsSuccessStatus: 204,
   })
 );
 app.use(morgan("combined"));

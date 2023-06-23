@@ -6,6 +6,7 @@ const verifyToken = require("../middleware/auth");
 const Trip = require("../model/Trip");
 const User = require("../model/User");
 const Place = require("../model/Place");
+const Day = require("../model/Day");
 
 const toId = require("mongodb").ObjectId;
 
@@ -64,6 +65,18 @@ router.post("/", verifyToken, async (req, res) => {
       image: place.image,
     });
     await newTrip.save();
+    // create day plans from trip id created
+    const days = Math.ceil(
+      (newTrip.end_at - newTrip.start_at) / (1000 * 60 * 60 * 24)
+    );
+    for (let i = 0; i < days; i++) {
+      const newDay = new Day({
+        name: `Day ${i + 1}`,
+        trip_id: newTrip._id,
+        date: new Date(newTrip.start_at.getTime() + i * (1000 * 60 * 60 * 24)),
+      });
+      await newDay.save();
+    }
     res.json({ success: true, message: "Trip created", trip: newTrip });
   } catch (err) {
     console.log({ err });

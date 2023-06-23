@@ -12,4 +12,9 @@ router.post(
   }
 );
 
+router.post("/upload-multiple", upload.array("images"), async (req, res) => {
+  const images = req.files.map((file) => file.path);
+  return res.json({ images });
+});
+
 module.exports = router;

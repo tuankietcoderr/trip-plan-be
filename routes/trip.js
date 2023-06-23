@@ -77,7 +77,11 @@ router.post("/", verifyToken, async (req, res) => {
       });
       await newDay.save();
     }
-    res.json({ success: true, message: "Trip created", trip: newTrip });
+    res.json({
+      success: true,
+      message: "Trip created",
+      trip: await newTrip.populate("place_id"),
+    });
   } catch (err) {
     console.log({ err });
     res.status(500).json({ success: false, message: "Server error" });

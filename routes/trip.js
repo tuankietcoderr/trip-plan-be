@@ -69,7 +69,7 @@ router.post("/", verifyToken, async (req, res) => {
     const days = Math.ceil(
       (newTrip.end_at - newTrip.start_at) / (1000 * 60 * 60 * 24)
     );
-    for (let i = 0; i < days; i++) {
+    for (let i = 0; i < (days || 1); i++) {
       const newDay = new Day({
         name: `Day ${i + 1}`,
         trip_id: newTrip._id,

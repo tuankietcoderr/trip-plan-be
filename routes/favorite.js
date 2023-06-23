@@ -43,10 +43,11 @@ router.post("/", verifyToken, async (req, res) => {
       user_id: new toId(req.user_id),
       place_id: placeId,
     });
+    const savedFavorite = await newFavorite.populate("place_id");
     await newFavorite.save();
     res.status(200).json({
       success: true,
-      newFavorite,
+      newFavorite: savedFavorite,
       message: "Add favorite success",
     });
   } catch (error) {

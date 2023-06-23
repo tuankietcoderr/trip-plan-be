@@ -13,7 +13,7 @@ router.get("/user", verifyToken, async (req, res) => {
   try {
     const trips = await Trip.find({
       user_id: new toId(req.user_id),
-    });
+    }).populate("place_id");
     res.status(200).json({ success: true, trips });
   } catch (error) {
     console.log({ error });

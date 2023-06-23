@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const verifyToken = require("../middleware/auth");
-
+const mongoose = require("mongoose");
 const Favorite = require("../model/Favorite");
 
-const toId = require("mongodb").ObjectId;
+const toId = mongoose.Types.ObjectId;
 
 router.get("/user", verifyToken, async (req, res) => {
   try {
@@ -41,12 +41,13 @@ router.post("/", verifyToken, async (req, res) => {
     }
     const newFavorite = new Favorite({
       user_id: new toId(req.user_id),
-      place_id: new toId(place_id),
+      place_id: placeId,
     });
+    console.log({ savedFavorite });
     await newFavorite.save();
     res.status(200).json({
       success: true,
-      addedId: newFavorite._id,
+      newFavorite,
       message: "Add favorite success",
     });
   } catch (error) {

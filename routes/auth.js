@@ -79,7 +79,12 @@ router.post("/signup", async (req, res) => {
       { user_id: newUser._id.toString() },
       process.env.JWT_SECRET
     );
-    res.json({ success: true, message: "User created", accessToken });
+    res.json({
+      success: true,
+      message: "User created",
+      accessToken,
+      user: newUser,
+    });
   } catch {
     res.status(500).json({ success: false, message: "Server error" });
   }
